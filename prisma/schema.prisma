@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/postgres"
+}
+
+model Teacher {
+  id   Int                   @id @default(autoincrement())
+  name String
+  stdTeacherMap StdTeacherMap[]
+}
+ 
+
+model Std {
+  id   Int                   @id @default(autoincrement())
+  std  Int
+  classTeacherId Int
+  student Student[]
+  stdTeacherMap StdTeacherMap[]
+
+}
+
+model StdTeacherMap {
+ id   Int                   @id @default(autoincrement())
+ stdId Int
+ std     Std       @relation(fields: [stdId], references: [id])
+ teacherId Int
+ teacher     Teacher       @relation(fields: [teacherId], references: [id])
+}
+
+model Student {
+  id   Int                   @id @default(autoincrement())
+  name String
+  stdId  Int
+  Std     Std       @relation(fields: [stdId], references: [id])
+  perents Perents[]
+}
+
+model Perents {
+  id   Int                   @id @default(autoincrement())
+  name String
+  StudentId Int
+  student     Student       @relation(fields: [StudentId], references: [id])
+}
